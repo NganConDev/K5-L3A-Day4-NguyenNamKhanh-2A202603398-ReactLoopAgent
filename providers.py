@@ -19,9 +19,21 @@ def post_json(url, headers, payload):
             return json.load(response)
     except urllib.error.HTTPError as exc:
         # Do not print response bodies: they may contain account or request data.
-        raise RuntimeError(f'Provider trả HTTP {exc.code}; kiểm tra model, key và quota.') from exc
+        if exc.code == 401:
+            raise RuntimeError('Provider từ chối request: sai API key hoặc quyền truy cập không hợp lệ.') from exc
+        if exc.code == 403:
+            raise RuntimeError('Provider từ chối request: tài khoản/key không có quyền hoặc bị khóa.') from exc
+        if exc.code == 429:
+            raise RuntimeError('Provider báo rate limit (429): quá nhiều request, hãy chờ một lúc rồi thử lại.') from exc
+        if exc.code >= 500:
+            raise RuntimeError(f'Provider đang lỗi phía server ({exc.code}): thử lại sau ít phút.') from exc
+        raise RuntimeError(f'Provider trả HTTP {exc.code}: kiểm tra cấu hình key, model và payload.') from exc
     except urllib.error.URLError as exc:
-        raise RuntimeError(f'Không kết nối được provider: {exc.reason}') from exc
+        raise RuntimeError(f'Không kết nối được provider: {exc.reason}. Kiểm tra mạng hoặc endpoint của provider.') from exc
+    except json.JSONDecodeError as exc:
+        raise RuntimeError('Provider trả về dữ liệu không phải JSON hợp lệ.') from exc
+    except Exception as exc:
+        raise RuntimeError(f'Lỗi không xác định khi gọi provider: {type(exc).__name__}: {exc}') from exc
 
 
 class Provider:
