@@ -2,6 +2,16 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
+
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = None
+
+if load_dotenv is not None:
+    load_dotenv(Path(__file__).resolve().parent / '.env')
+
 from agent import run_agent
 from providers import Provider
 from status_tools import StatusTools
@@ -19,7 +29,7 @@ def main():
     p.add_argument('question', help='Câu hỏi cho agent')
     p.add_argument('--bonus', action='store_true', help='Dùng bộ tools bonus')
     p.add_argument('--mode', choices=['snapshot', 'live'], default='snapshot')
-    p.add_argument('--provider', choices=['openai', 'gemini', 'anthropic', 'openrouter'], default=os.getenv('PROVIDER', 'openai'))
+    p.add_argument('--provider', choices=['openai', 'gemini', 'anthropic', 'openrouter'], default=os.getenv('PROVIDER', 'openrouter'))
     p.add_argument('--model', default=os.getenv('MODEL'))
     p.add_argument('--max-steps', type=int, default=6)
     args = p.parse_args()
@@ -32,6 +42,7 @@ def main():
         return 1
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0 if result['status'] == 'completed' else 1
+
 
 if __name__ == '__main__':
     sys.exit(main())
