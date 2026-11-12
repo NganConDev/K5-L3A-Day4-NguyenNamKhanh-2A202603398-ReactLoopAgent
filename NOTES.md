@@ -1,7 +1,7 @@
 # Ghi chú phân tích · Day 04
 
-Họ và tên:
-MSSV:
+Họ và tên:Nguyễn Nam Khánh
+MSSV:2A202603398
 
 ## 1. Case được chọn
 
@@ -24,12 +24,12 @@ Dán đoạn trace chứng minh lỗi và nêu nguyên nhân có thể xảy ra.
 
 ## 4. So sánh hai lần chạy
 
-| Chỉ số | `eval_before.json` | `eval_after.json` |
-|---|---|---|
-| Điểm tổng |  |  |
-| Điểm case đã chọn |  |  |
-| Số model calls |  |  |
-| Token, chi phí nếu có |  |  |
+| Chỉ số                | `eval_before.json` | `eval_after.json` |
+| --------------------- | ------------------ | ----------------- |
+| Điểm tổng             |                    |                   |
+| Điểm case đã chọn     |                    |                   |
+| Số model calls        |                    |                   |
+| Token, chi phí nếu có |                    |                   |
 
 - Lỗi đã giải quyết:
 - Lỗi còn lại hoặc mới xuất hiện:
